@@ -1,64 +1,59 @@
-# Python 代码规范与开发流程指南
+# Python 协作开发代码规范建议
 
-这个项目展示了如何使用现代Python工具链来维护高质量的代码，包括代码规范检查、自动化测试、持续集成等最佳实践。
+这个项目展示了现代Python团队协作开发的最佳实践，包括代码规范建议、自动化工具配置、测试策略等。本文档旨在为团队提供参考标准，而非强制要求。
 
 ## 🎯 项目目标
 
-- 展示现代Python项目的标准开发流程
-- 提供完整的代码规范配置和示例
-- 演示自动化测试和代码质量保证
-- 建立可复用的项目模板
+- 建立团队协作的Python开发标准
+- 提供可配置的代码质量工具链
+- 展示自动化测试和代码审查流程
+- 创建可复用的项目模板和配置
 
-## 🛠️ 技术栈
+## 🛠️ 技术栈选型与建议
 
-- **Python 3.10+**: 现代Python特性支持
-- **Ruff**: 极速的Python代码检查器和格式化工具
-- **Pytest**: 强大的测试框架
-- **Pydantic**: 数据验证和设置管理
-- **UV**: 快速的Python包管理器
-- **Pyright**: 智能的静态类型检查器 (推荐)
+### 核心工具选择
 
-> 待 uv 原团队开发完 [`ty`](https://github.com/astral-sh/ty) 后，考虑用 ty 来进行类型检查
+| 工具 | 选择 | 原因 | 替代方案 |
+|------|------|------|----------|
+| **包管理器** | UV | 极速安装、依赖解析快、支持虚拟环境管理 | Poetry, Pipenv |
+| **代码检查** | Ruff | 速度极快、规则丰富、配置简单 | Flake8 + Black + isort |
+| **类型检查** | Pyright | 微软开发、性能优秀、错误提示准确 | MyPy |
+| **测试框架** | Pytest | 功能强大、插件丰富、社区活跃 | unittest, nose2 |
+| **数据验证** | Pydantic | 类型安全、性能优秀、生态完善 | Marshmallow, dataclasses |
 
-## 📁 项目结构
+### 工具选型考虑因素
+
+1. **性能优先**: Ruff 比传统工具快 10-100 倍
+2. **开发体验**: 配置简单，错误提示清晰
+3. **社区支持**: 活跃的维护和更新
+4. **团队学习成本**: 选择主流工具降低学习成本
+
+> **注意**: 如果团队对某些工具不熟悉，建议先在小范围试用，收集反馈后再决定是否推广。
+
+## 📁 当前项目结构
 
 ```text
 python-code-style/
 ├── src/                    # 源代码目录
 │   ├── models/             # 数据模型定义
-│   │   ├── __init__.py
-│   │   ├── robot.py        # 机器人模型
-│   │   └── task.py         # 任务模型
 │   ├── scheduler/          # 业务逻辑层
-│   │   ├── __init__.py
-│   │   └── robot_scheduler.py
 │   ├── services/           # 服务层
-│   │   ├── __init__.py
-│   │   └── task_service.py
 │   ├── utils/              # 工具函数
-│   │   ├── __init__.py
-│   │   ├── location_utils.py
-│   │   ├── status_monitor.py
-│   │   └── validators.py
 │   └── example.py          # 使用示例
 ├── tests/                  # 测试代码
-│   ├── conftest.py         # 测试配置
-│   ├── test_models/        # 模型测试
-│   ├── test_scheduler/     # 调度器测试
-│   ├── test_services/      # 服务测试
-│   └── test_utils/         # 工具测试
 ├── pyproject.toml          # 项目配置
 ├── uv.lock                 # 依赖锁定文件
-├── README.md               # 项目文档
-└── main.py                 # 主程序入口
+└── README.md               # 项目文档
 ```
+
+**建议**: 根据项目规模和团队习惯调整目录结构，保持简洁明了。
 
 ## 🚀 快速开始
 
 ### 环境准备
 
 ```bash
-# 1. 安装uv（如果未安装）
+# 1. 安装uv（推荐）
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 2. 克隆项目
@@ -69,7 +64,7 @@ cd python-code-style
 ### 安装依赖
 
 ```bash
-# 安装所有依赖（包括Python，相关的包，以及开发依赖）
+# 安装所有依赖
 uv sync
 ```
 
@@ -83,58 +78,67 @@ uv run python main.py
 uv run python src/example.py
 ```
 
-## 🔄 标准开发流程
+## 🔄 协作开发流程建议
 
-### 代码开发阶段
+### 1. 功能开发阶段
 
-#### 创建新功能分支
+#### 创建功能分支
 
 ```bash
 git checkout -b feature/new-feature
 ```
 
-#### 添加新的外部依赖
+#### 依赖管理
 
 ```bash
+# 添加新依赖
 uv add <package-name>
-```
 
-#### 移除外部依赖
+# 添加开发依赖
+uv add --dev <package-name>
 
-```bash
+# 移除依赖
 uv remove <package-name>
-
 ```
 
-> 绝对禁止：在项目中直接相关依赖的的版本或者使用 pip 来安装依赖
-> 对于外部依赖，使用 uv 来管理
+> **建议**:
+>
+> 1. 定期审查依赖，移除不再使用的包，保持依赖列表简洁
+> 2. 对于外部依赖，使用 uv 来管理, 不建议直接修改 pyproject.toml 或 uv.lock 文件
 >
 
-#### 实时检查代码
+#### 实时代码检查
 
 ```bash
+# 实时检查代码（推荐在开发时使用）
 uv run ruff check --watch
+
+# 或者使用编辑器插件
+# VS Code: Python + Ruff 插件
+# PyCharm: Ruff 插件
 ```
 
-> 推荐安装 Ruff 插件，在编辑器中实时检查代码
-
-#### 自动格式化代码
+#### 代码格式化
 
 ```bash
+# 自动格式化
 uv run ruff format
+
+# 检查格式化状态
+uv run ruff format --check
 ```
 
 #### 运行测试
 
 ```bash
+# 运行所有测试
 uv run pytest
-```
 
-#### 检查测试覆盖率
+# 运行特定测试
+uv run pytest tests/test_models/
 
-```bash
+# 生成覆盖率报告
 uv run pytest --cov=src --cov-report=html
-
 ```
 
 ### 2. 代码提交前检查
@@ -148,16 +152,16 @@ uv run pytest              # 单元测试
 uv run pytest --cov=src    # 覆盖率检查
 ```
 
-### 3. 持续集成检查
+> **建议**: 可以配置 Git hooks 自动运行这些检查，确保代码质量。
 
-项目配置了以下自动化检查：
+### 3. 代码审查流程
 
-- **代码风格**: Ruff linting (E, W, F, I, B, C4, UP, SIM, N, D)
-- **代码格式化**: Ruff formatting
-- **类型检查**: Pyright 静态类型检查
-- **单元测试**: Pytest with coverage
+1. **自检**: 提交前运行完整的代码质量检查
+2. **同行评审**: 至少一名团队成员审查代码
+3. **自动化检查**: CI/CD 流水线验证代码质量
+4. **合并**: 通过所有检查后合并到主分支
 
-## 📋 详细代码规范
+## 📋 代码规范建议
 
 ### 1. 导入规范
 
@@ -176,7 +180,7 @@ from src.models.robot import Robot
 from src.utils.validators import validate_position
 ```
 
-**规则**:
+**建议**:
 
 - 按标准库 → 第三方库 → 本地库的顺序导入
 - 每组之间用空行分隔
@@ -211,12 +215,12 @@ def calculate_distance(pos1: Position, pos2: Position) -> float:
     return ((pos2.x - pos1.x) ** 2 + (pos2.y - pos1.y) ** 2) ** 0.5
 ```
 
-**规则**:
+**建议**:
 
 - 使用Google风格的文档字符串
-- 所有公共函数、类、模块必须有文档字符串
+- 所有公共函数、类、模块建议添加文档字符串
 - 包含Args、Returns、Raises、Example等部分
-- 使用类型注解
+- 使用类型注解提高代码可读性
 
 ### 3. 命名规范
 
@@ -246,7 +250,7 @@ class Robot:
 ### 4. 代码长度和格式
 
 ```python
-# 行长度限制：88字符
+# 行长度建议：88字符（可配置）
 def complex_function_with_long_parameters(
     param1: str,
     param2: int,
@@ -283,7 +287,7 @@ def safe_operation(data: Dict[str, Any]) -> Optional[str]:
         raise RuntimeError(f"操作失败: {e}") from e
 ```
 
-## 🧪 测试规范
+## 🧪 测试规范建议
 
 ### 1. 测试文件结构
 
@@ -315,21 +319,21 @@ class TestRobot:
             )
 ```
 
-### 2. 测试覆盖率要求
+### 2. 测试覆盖率建议
 
-- 最低覆盖率：80%
-- 核心业务逻辑：90%+
-- 工具函数：85%+
+- **最低覆盖率**: 80%（可根据项目复杂度调整）
+- **核心业务逻辑**: 90%+
+- **工具函数**: 85%+
 
-## 🔧 工具配置详解
+> **注意**: 覆盖率不是唯一标准，测试质量和业务价值更重要。
 
-### Ruff 配置说明
+## 🔧 工具配置与调整
+
+### Ruff 规则配置
+
+当前配置的规则集：
 
 ```toml
-[tool.ruff]
-line-length = 88                    # 行长度限制
-target-version = "py310"           # Python目标版本
-
 [tool.ruff.lint]
 select = [
     "E",   # pycodestyle错误
@@ -345,7 +349,11 @@ select = [
 ]
 ```
 
-### 常用命令
+### 如何调整 Ruff 规则
+
+可以参考 [Ruff 规则调整指南](WHY.md#4-ruff-规则调整指南) 来调整 Ruff 规则
+
+### 常用命令参考
 
 ```bash
 # 代码检查
@@ -358,17 +366,16 @@ uv run ruff format                   # 格式化所有文件
 uv run ruff format --check          # 检查格式化
 
 # 类型检查
-uv run pyright src/                    # 使用Pyright
+uv run pyright src/                 # 使用Pyright
 
 # 测试
 uv run pytest                       # 运行所有测试
 uv run pytest -v                    # 详细输出
 uv run pytest -k "test_robot"       # 运行特定测试
 uv run pytest --cov=src --cov-report=html  # 生成覆盖率报告
-
 ```
 
-## 📚 最佳实践
+## 📚 最佳实践建议
 
 ### 1. 代码组织
 
@@ -391,15 +398,53 @@ uv run pytest --cov=src --cov-report=html  # 生成覆盖率报告
 - 避免在日志中记录敏感信息
 - 使用环境变量管理敏感配置
 
+## 🤝 团队协作建议
+
+### 1. 代码审查要点
+
+- **功能正确性**: 代码是否实现了预期功能
+- **代码质量**: 是否符合项目规范
+- **可维护性**: 代码是否易于理解和维护
+- **性能影响**: 是否对系统性能有负面影响
+- **安全性**: 是否存在安全风险
+
+### 2. 沟通建议
+
+- 使用清晰的提交信息
+- 在PR中详细说明变更原因
+- 及时响应审查意见
+- 保持开放和建设性的讨论氛围
+
+### 3. 知识分享
+
+- 定期进行代码规范培训
+- 分享最佳实践和经验教训
+- 建立团队知识库
+- 鼓励结对编程
+
 ## 📖 参考资料
 
 - [Ruff 官方文档](https://docs.astral.sh/ruff/)
+- [Ruff 规则参考](https://docs.astral.sh/ruff/rules/)
 - [Google Python 风格指南](https://google.github.io/styleguide/pyguide.html)
 - [PEP 8 -- Python代码风格指南](https://pep8.org/)
 - [Pytest 官方文档](https://docs.pytest.org/)
 - [Pydantic 官方文档](https://docs.pydantic.dev/)
 
-## 🤝 贡献指南
+> **详细指南**: 查看 [WHY.md](WHY.md) 了解工具选型原因、规则调整方法和团队协作最佳实践。
+
+## 🚀 贡献指南
+
+### 1. 提出改进建议
+
+如果您对代码规范有改进建议：
+
+1. **创建 Issue**: 在项目中创建 Issue 描述建议
+2. **提供理由**: 说明为什么需要这个改进
+3. **讨论影响**: 分析对团队和项目的影响
+4. **等待反馈**: 等待团队讨论和决策
+
+### 2. 提交代码变更
 
 1. Fork 项目
 2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
@@ -407,6 +452,13 @@ uv run pytest --cov=src --cov-report=html  # 生成覆盖率报告
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 打开 Pull Request
 
-## 📄 许可证
+### 3. 参与讨论
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+- 积极参与代码审查
+- 提供建设性的反馈
+- 分享经验和最佳实践
+- 帮助新团队成员
+
+---
+
+**注意**: 本文档中的规范和建议旨在提高团队协作效率，具体实施时可根据项目需求和团队习惯进行调整。如有疑问或建议，欢迎通过 Issue 或 Pull Request 参与讨论。
