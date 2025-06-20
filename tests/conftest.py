@@ -13,13 +13,13 @@ from src.services.task_service import TaskService
 
 
 @pytest.fixture
-def sample_position():
+def sample_position() -> Position:
     """创建示例位置"""
     return Position(x=0.0, y=0.0)
 
 
 @pytest.fixture
-def target_position():
+def target_position() -> Position:
     """创建目标位置"""
     return Position(x=10.0, y=5.0)
 
@@ -156,7 +156,7 @@ def task_service_with_data(
 
 
 @pytest.fixture
-def multiple_positions():
+def multiple_positions() -> list[Position]:
     """创建多个位置点"""
     return [
         Position(x=0, y=0),
@@ -168,7 +168,7 @@ def multiple_positions():
 
 
 @pytest.fixture
-def delivery_positions():
+def delivery_positions() -> list[Position]:
     """创建配送点位置列表"""
     return [
         Position(x=10, y=5),
@@ -179,7 +179,7 @@ def delivery_positions():
 
 
 @pytest.fixture
-def patrol_route():
+def patrol_route() -> list[Position]:
     """创建巡逻路线"""
     return [
         Position(x=0, y=0),
