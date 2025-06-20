@@ -198,12 +198,12 @@ class RobotScheduler:
             包含系统状态信息的字典
         """
         total_robots = len(self.robots)
-        idle_robots = len([
-            r for r in self.robots.values() if r.status == RobotStatus.IDLE
-        ])
-        busy_robots = len([
-            r for r in self.robots.values() if r.status == RobotStatus.BUSY
-        ])
+        idle_robots = len(
+            [r for r in self.robots.values() if r.status == RobotStatus.IDLE]
+        )
+        busy_robots = len(
+            [r for r in self.robots.values() if r.status == RobotStatus.BUSY]
+        )
 
         total_tasks = len(self.tasks)
         pending_tasks = len([t for t in self.tasks.values() if t.is_pending()])
@@ -213,24 +213,24 @@ class RobotScheduler:
             "total_robots": total_robots,
             "idle_robots": idle_robots,
             "busy_robots": busy_robots,
-            "charging_robots": len([
-                r for r in self.robots.values() if r.status == RobotStatus.CHARGING
-            ]),
-            "maintenance_robots": len([
-                r for r in self.robots.values() if r.status == RobotStatus.MAINTENANCE
-            ]),
+            "charging_robots": len(
+                [r for r in self.robots.values() if r.status == RobotStatus.CHARGING]
+            ),
+            "maintenance_robots": len(
+                [r for r in self.robots.values() if r.status == RobotStatus.MAINTENANCE]
+            ),
             "total_tasks": total_tasks,
             "pending_tasks": pending_tasks,
-            "assigned_tasks": len([
-                t for t in self.tasks.values() if t.status == TaskStatus.ASSIGNED
-            ]),
-            "in_progress_tasks": len([
-                t for t in self.tasks.values() if t.status == TaskStatus.IN_PROGRESS
-            ]),
+            "assigned_tasks": len(
+                [t for t in self.tasks.values() if t.status == TaskStatus.ASSIGNED]
+            ),
+            "in_progress_tasks": len(
+                [t for t in self.tasks.values() if t.status == TaskStatus.IN_PROGRESS]
+            ),
             "completed_tasks": completed_tasks,
-            "failed_tasks": len([
-                t for t in self.tasks.values() if t.status == TaskStatus.FAILED
-            ]),
+            "failed_tasks": len(
+                [t for t in self.tasks.values() if t.status == TaskStatus.FAILED]
+            ),
         }
 
     def _find_best_robot(self, task: Task) -> Robot | None:
