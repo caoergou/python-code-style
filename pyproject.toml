@@ -1,0 +1,109 @@
+[project]
+name = "python-code-style"
+authors = [{ name = "Eric Cao", email = "itsericsmail@gmail.com" }]
+version = "0.1.0"
+description = "A Demo Project show how to use ruff to check python code style"
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["ruff", "code-style", "python", "linting"]
+dependencies = ["pydantic>=2.0.0,<3.0.0"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "mypy>=1.16.1",
+]
+
+# Ruff 配置 - Google Python 代码风格
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "SIM", "N", "D"]
+ignore = ["E501", "D100", "D104", "D203", "D213", "D415", "T201", "UP007"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "D104"]
+"tests/*" = ["D100", "D103", "D104"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --strict-config"
+
+
+# Coverage 配置：
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "tests/*",
+    "src/example.py", # 示例文件，不需要测试覆盖
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstract",
+    "pass",
+]
+
+# 设置最低覆盖率要求
+fail_under = 80
+show_missing = true
+
+# MyPy 配置
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = false          # 允许返回Any类型
+warn_unused_configs = false      # 不检查未使用的配置
+disallow_untyped_defs = false    # 允许未注解的函数定义
+disallow_incomplete_defs = false # 允许不完整的函数定义
+check_untyped_defs = true        # 检查未注解函数体
+no_implicit_optional = false     # 允许隐式可选类型
+warn_redundant_casts = false     # 不检查冗余的类型转换
+warn_unused_ignores = false      # 不检查未使用的ignore注释
+warn_no_return = false           # 不检查无返回值的函数
+warn_unreachable = false         # 不检查不可达代码
+strict_equality = false          # 不严格检查相等性
+ignore_missing_imports = true    # 忽略缺失的导入
+allow_redefinition = false       # 不允许重新定义
+allow_untyped_globals = true     # 允许未注解的全局变量
+show_error_codes = false         # 不显示错误代码
+show_column_numbers = false      # 不显示列号
+show_error_context = false       # 不显示错误上下文
+hide_error_codes = true          # 隐藏错误代码
+ignore_errors = false            # 不忽略错误，但配置更宽松
+
+# 忽略特定文件的类型检查
+exclude = [
+    "tests/",
+    "src/example.py", # 示例文件不需要类型检查
+]
+
+# 第三方库的类型检查设置
+[[tool.mypy.overrides]]
+module = "pydantic.*"
+ignore_missing_imports = true

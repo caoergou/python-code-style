@@ -1,0 +1,26 @@
+{
+  "recommendations": [
+    // Python核心扩展
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+
+    // 代码格式化和检查
+    "charliermarsh.ruff",
+
+    // 测试支持
+    "ms-python.pytest",
+
+    // 开发辅助工具
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "ms-vscode.vscode-markdown",
+
+    // 实用工具
+    "ms-vscode.vscode-todo-highlight"
+  ],
+  "unwantedRecommendations": [
+    // 避免冲突的扩展
+    "ms-python.flake8",
+    "ms-python.pylint"
+  ]
+}
