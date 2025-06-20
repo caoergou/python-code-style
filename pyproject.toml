@@ -14,7 +14,7 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "pytest-mock>=3.10.0",
-    "mypy>=1.16.1",
+    "pyright>=1.1.0",
 ]
 
 # Ruff 配置 - Google Python 代码风格
@@ -107,3 +107,46 @@ exclude = [
 [[tool.mypy.overrides]]
 module = "pydantic.*"
 ignore_missing_imports = true
+
+# Pyright 配置 (mypy的替代方案)
+[tool.pyright]
+include = ["src"]
+exclude = ["**/__pycache__", "**/.venv", "**/node_modules"]
+
+# 类型检查模式
+typeCheckingMode = "basic" # 可选: "off", "basic", "strict"
+
+# 报告选项
+reportMissingImports = "warning"
+reportMissingTypeStubs = "none"
+reportUnusedImport = "warning"
+reportUnusedClass = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportDuplicateImport = "warning"
+reportOptionalSubscript = "warning"
+reportOptionalMemberAccess = "warning"
+reportOptionalCall = "warning"
+reportOptionalIterable = "warning"
+reportOptionalContextManager = "warning"
+reportOptionalOperand = "warning"
+reportGeneralTypeIssues = "warning"
+reportIncompatibleMethodOverride = "warning"
+reportIncompatibleVariableOverride = "warning"
+reportInconsistentConstructor = "warning"
+reportOverlappingOverloads = "warning"
+reportPrivateUsage = "none"
+reportTypeCommentUsage = "warning"
+reportUnboundVariable = "warning"
+reportUndefinedVariable = "warning"
+reportUnnecessaryCast = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
+reportUnnecessaryIsInstance = "warning"
+reportUnusedExpression = "warning"
+
+# 分析选项
+useLibraryCodeForTypes = true
+autoImportCompletions = true
+autoSearchPaths = true
+stubPath = "typings"
