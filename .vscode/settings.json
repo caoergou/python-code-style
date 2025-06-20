@@ -20,12 +20,6 @@
     }
   },
 
-  // 类型检查配置 - 与mypy对齐
-  "python.analysis.typeCheckingMode": "strict",
-  "python.analysis.autoImportCompletions": true,
-  "python.analysis.autoSearchPaths": true,
-  "python.analysis.diagnosticMode": "workspace",
-
   // 测试配置
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
@@ -87,10 +81,5 @@
   },
   "terminal.integrated.env.windows": {
     "PYTHONPATH": "${workspaceFolder}"
-  },
-
-  // IntelliSense配置
-  "python.analysis.completeFunctionParens": true,
-  "python.analysis.fixAll": [],
-  "python.analysis.importFormat": "absolute"
+  }
 }
