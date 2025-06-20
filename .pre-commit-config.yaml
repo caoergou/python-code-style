@@ -1,0 +1,60 @@
+# Pre-commit 配置 - 代码提交前的质量检查
+repos:
+  # Ruff - Python代码检查和格式化
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.0
+    hooks:
+      # 代码检查
+      - id: ruff
+        args: [--fix]
+      # 代码格式化
+      - id: ruff-format
+
+  # 通用代码质量检查
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # 检查YAML文件语法
+      - id: check-yaml
+      # 检查TOML文件语法
+      - id: check-toml
+      # 检查JSON文件语法
+      - id: check-json
+      # 检查是否有合并冲突标记
+      - id: check-merge-conflict
+      # 检查文件是否以换行符结尾
+      - id: end-of-file-fixer
+      # 移除行尾空白字符
+      - id: trailing-whitespace
+      # 检查大文件
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      # 检查文件名
+      - id: check-case-conflict
+      # 检查可执行文件的shebang
+      - id: check-executables-have-shebangs
+
+  # Python特定检查
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # 检查Python语法
+      - id: check-ast
+      # 检查Python的docstring
+      - id: check-docstring-first
+      # 调试语句检查
+      - id: debug-statements
+
+# 配置选项
+default_stages: [commit]
+fail_fast: false
+
+# 排除的文件和目录
+exclude: |
+  (?x)(
+    ^\.git/|
+    ^\.mypy_cache/|
+    ^\.pytest_cache/|
+    ^__pycache__/|
+    \.egg-info/
+  )
