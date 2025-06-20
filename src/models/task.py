@@ -9,7 +9,7 @@ from enum import Enum
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from .robot import Position
+from src.models.robot import Position
 
 
 class TaskType(str, Enum):

@@ -4,8 +4,8 @@
 这个模块实现了机器人任务调度的核心算法，展示了如何设计复杂业务逻辑的最佳实践。
 """
 
-from models.robot import Robot, RobotStatus
-from models.task import Task, TaskStatus
+from src.models.robot import Robot, RobotStatus
+from src.models.task import Task, TaskStatus
 
 
 class SchedulerError(Exception):

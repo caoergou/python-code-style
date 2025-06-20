@@ -6,8 +6,8 @@
 
 import uuid
 
-from models.robot import Position
-from models.task import Task, TaskStatus, TaskType
+from src.models.robot import Position
+from src.models.task import Task, TaskStatus, TaskType
 
 
 class TaskService:
