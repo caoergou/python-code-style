@@ -6,7 +6,7 @@
 
 from typing import Any
 
-from models.robot import Position
+from src.models.robot import Position
 
 
 def validate_position(position: Any) -> bool:

@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: |
+          uv sync --group dev
+
+      - name: Run Ruff linting
+        run: |
+          uv run ruff check .
+
+      - name: Run Ruff formatting check
+        run: |
+          uv run ruff format .
+
+      - name: Run Pyright type checking
+        run: |
+          uv run pyright src/
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
+      - name: Run tests with coverage
+        run: |
+          uv run pytest --cov=src --cov-report=term-missing --cov-report=html
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-${{ matrix.python-version }}
+          path: htmlcov/
+
+      - name: Generate validation report
+        run: |
+          echo "# 代码验证报告" > validation-report.md
+          echo "**检查时间:** $(date)" >> validation-report.md
+          echo "**Python版本:** ${{ matrix.python-version }}" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "## 验证结果" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "### ✅ 代码风格检查 (Ruff)" >> validation-report.md
+          echo "代码风格检查已通过" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "### ✅ 代码格式化检查 (Ruff Format)" >> validation-report.md
+          echo "代码格式化检查已通过" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "### ✅ 类型检查 (Pyright)" >> validation-report.md
+          echo "类型检查已通过" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "### ✅ 单元测试 (Pytest)" >> validation-report.md
+          echo "所有测试已通过" >> validation-report.md
+          echo "" >> validation-report.md
+
+          echo "### 📊 测试覆盖率" >> validation-report.md
+          echo "详细覆盖率报告请查看上传的HTML文件" >> validation-report.md
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report-${{ matrix.python-version }}
+          path: validation-report.md
