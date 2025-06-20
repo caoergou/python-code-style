@@ -1,8 +1,8 @@
 """基本使用示例 - 展示机器人调度系统的主要功能"""
 
-from src.models.robot import Position, Robot
-from src.models.task import Task, TaskType
-from src.scheduler.robot_scheduler import RobotScheduler
+from models.robot import Position, Robot
+from models.task import Task, TaskType
+from scheduler.robot_scheduler import RobotScheduler
 
 
 def main():
