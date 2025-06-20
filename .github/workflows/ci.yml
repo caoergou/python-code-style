@@ -47,7 +47,7 @@ jobs:
           uv run pytest --cov=src --cov-report=term-missing --cov-report=html
 
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-reports-${{ matrix.python-version }}
           path: htmlcov/
@@ -82,7 +82,7 @@ jobs:
           echo "详细覆盖率报告请查看上传的HTML文件" >> validation-report.md
 
       - name: Upload validation report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: validation-report-${{ matrix.python-version }}
           path: validation-report.md
