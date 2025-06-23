@@ -6,8 +6,8 @@
 
 from datetime import datetime
 
-from models.robot import Robot, RobotStatus
-from models.task import Task, TaskStatus
+from src.models.robot import Robot, RobotStatus
+from src.models.task import Task, TaskStatus
 
 
 class StatusMonitor:

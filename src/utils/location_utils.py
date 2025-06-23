@@ -6,7 +6,7 @@
 
 import math
 
-from models.robot import Position, Robot
+from src.models.robot import Position, Robot
 
 
 def calculate_distance(pos1: Position, pos2: Position) -> float:
